@@ -19,8 +19,7 @@ map('v', 'd', '"_d')
 map('t', '<S-Esc>', '<C-\\><C-n>')
 
 -- remove post-search highlight
-map('n', '<C-l>', '<cmd>nohlsearch<CR>')
-
+map('n', '<C-m>', '<cmd>nohlsearch<CR>')
 
 -- file tree keys
 map('n', '<F5>', '<cmd>NvimTreeToggle<CR>', "Toggle NvimTree")

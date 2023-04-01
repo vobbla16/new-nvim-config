@@ -14,12 +14,19 @@ local packer_bootstrap = ensure_packer()
 return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 
-	use {
+--[[	use {
 		'sainnhe/gruvbox-material',
 		config = function ()
 			vim.g.gruvbox_material_background = 'medium'
 			vim.g.gruvbox_material_foreground = 'material'
 			vim.cmd 'colorscheme gruvbox-material'
+		end
+	}
+--]]
+	use {
+		'rebelot/kanagawa.nvim',
+		config = function()
+			vim.cmd 'colorscheme kanagawa'
 		end
 	}
 
@@ -52,7 +59,7 @@ return require('packer').startup(function(use)
 	use {
 		'nvim-treesitter/nvim-treesitter',
 		run = function()
-			local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+		local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
 			ts_update()
 		end,
 		config = function ()
@@ -74,7 +81,8 @@ return require('packer').startup(function(use)
 		config = function ()
 			require('lualine').setup {
 				options = {
-					theme = 'gruvbox-material',
+--					theme = 'gruvbox-material',
+					theme = 'kanagawa',
 					section_separators = '',
 					component_separators = ''
 				}
@@ -129,7 +137,12 @@ return require('packer').startup(function(use)
 		'williamboman/mason-lspconfig.nvim',
 		after = 'mason.nvim',
 		config = function ()
-			require("mason-lspconfig").setup()
+			require("mason-lspconfig").setup {}
+			require("mason-lspconfig").setup_handlers {
+				function (server_name) 
+					require("lspconfig")[server_name].setup {}
+				end
+			}
 		end
 	}
 
