@@ -10,7 +10,6 @@ local ensure_packer = function()
 end
 
 local packer_bootstrap = ensure_packer()
-
 return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 
@@ -128,6 +127,7 @@ return require('packer').startup(function(use)
 
 	use {
 		"williamboman/mason.nvim",
+		run = ":MasonUpdate",
 		config = function ()
 			require('mason').setup()
 		end
@@ -137,9 +137,11 @@ return require('packer').startup(function(use)
 		'williamboman/mason-lspconfig.nvim',
 		after = 'mason.nvim',
 		config = function ()
-			require("mason-lspconfig").setup {}
+			require("mason-lspconfig").setup {
+				ensure_installed = { "lua_ls" }
+			}
 			require("mason-lspconfig").setup_handlers {
-				function (server_name) 
+				function (server_name)
 					require("lspconfig")[server_name].setup {}
 				end
 			}

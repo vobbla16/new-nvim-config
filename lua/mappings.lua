@@ -5,6 +5,12 @@ local function map(mode, lhs, rhs, desc, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+-- auto indent on empty line.
+vim.keymap.set('n', 'i', function ()
+  return string.match(vim.api.nvim_get_current_line(), '%g') == nil
+         and 'cc' or 'i'
+end, {expr=true, noremap=true})
+
 -- navigation between windows
 map('n', '<C-h>', '<C-w>h')
 map('n', '<C-j>', '<C-w>j')
