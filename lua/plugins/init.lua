@@ -13,7 +13,7 @@ local packer_bootstrap = ensure_packer()
 return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 
---[[	use {
+	--[[	use {
 		'sainnhe/gruvbox-material',
 		config = function ()
 			vim.g.gruvbox_material_background = 'medium'
@@ -21,7 +21,7 @@ return require('packer').startup(function(use)
 			vim.cmd 'colorscheme gruvbox-material'
 		end
 	}
---]]
+	--]]
 	use {
 		'rebelot/kanagawa.nvim',
 		config = function()
@@ -58,7 +58,7 @@ return require('packer').startup(function(use)
 	use {
 		'nvim-treesitter/nvim-treesitter',
 		run = function()
-		local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+			local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
 			ts_update()
 		end,
 		config = function ()
@@ -80,7 +80,7 @@ return require('packer').startup(function(use)
 		config = function ()
 			require('lualine').setup {
 				options = {
---					theme = 'gruvbox-material',
+					--					theme = 'gruvbox-material',
 					theme = 'kanagawa',
 					section_separators = '',
 					component_separators = ''
@@ -142,11 +142,58 @@ return require('packer').startup(function(use)
 			}
 			require("mason-lspconfig").setup_handlers {
 				function (server_name)
-					require("lspconfig")[server_name].setup {}
+					local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+					require("lspconfig")[server_name].setup {
+						capabilities = capabilities
+					}
+				end,
+
+				["lua_ls"] = function ()
+					local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+					require("lspconfig").lua_ls.setup {
+						capabilities = capabilities,
+						settings = {
+							Lua = {
+								runtime = {
+									-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+									version = 'LuaJIT',
+								},
+								diagnostics = {
+									-- Get the language server to recognize the `vim` global
+									globals = {'vim'},
+								},
+								workspace = {
+									-- Make the server aware of Neovim runtime files
+									library = vim.api.nvim_get_runtime_file("", true),
+								},
+								-- Do not send telemetry data containing a randomized but unique identifier
+								telemetry = {
+									enable = false,
+								}
+							},
+						},
+					}
 				end
 			}
 		end
 	}
+
+	use 'hrsh7th/cmp-nvim-lsp'
+	use 'hrsh7th/cmp-buffer'
+	use 'hrsh7th/cmp-path'
+	use 'hrsh7th/cmp-cmdline'
+	use 'FelipeLema/cmp-async-path'
+	use {
+		'hrsh7th/nvim-cmp',
+		config = function()
+			require("plugins/cmp")
+		end
+	}
+
+	use 'L3MON4D3/LuaSnip'
+	use 'saadparwaiz1/cmp_luasnip'
 
 	if packer_bootstrap then
 		require('packer').sync()
