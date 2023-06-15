@@ -1,3 +1,6 @@
+local wk = require("which-key")
+
+
 local function map(mode, lhs, rhs, desc, opts)
   local options = {noremap = true, desc = desc}
 
@@ -10,6 +13,10 @@ vim.keymap.set('n', 'i', function ()
   return string.match(vim.api.nvim_get_current_line(), '%g') == nil
          and 'cc' or 'i'
 end, {expr=true, noremap=true})
+
+
+
+vim.g.mapleader = ' '
 
 -- navigation between windows
 map('n', '<C-h>', '<C-w>h')
@@ -42,3 +49,26 @@ map('n', '<C-S-q>', '<cmd>BufferLineMovePrev<CR>', 'Swap with previous buffer')
 -- floating terminal
 map('n', '<F6>', '<cmd>FloatermToggle<CR>', 'Toggle floating terminal')
 map('t', '<F6>', '<C-\\><C-n><cmd>FloatermToggle<CR>', 'Detach from terminal and toggle it')
+
+-- telescope
+--  basic
+wk.register({
+	f = {
+		name = "Telescope"
+	},
+	c = {
+		name = "Code"
+	}
+}, { prefix = "<leader>" })
+
+map('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files()<CR>', 'Find files')
+map('n', '<leader>fg', '<cmd>lua require("telescope.builtin").live_grep()<CR>', 'Live grep')
+map('n', '<leader>fb', '<cmd>lua require("telescope.builtin").buffers()<CR>', 'Buffers')
+map('n', '<leader>fh', '<cmd>lua require("telescope.builtin").help_tags()<CR>', 'Help tags')
+
+--  lsp
+map('n', '<leader>cr', '<cmd>lua require("telescope.builtin").lsp_references()<CR>', 'References')
+map('n', '<leader>cs', '<cmd>lua require("telescope.builtin").lsp_document_symbols()<CR>', 'Symbols')
+map('n', '<leader>cd', '<cmd>lua require("telescope.builtin").diagnostics()<CR>', 'Diagnostics')
+map('n', '<leader>ci', '<cmd>lua require("telescope.builtin").lsp_implementations()<CR>', 'Implementations')
+map('n', '<leader>cd', '<cmd>lua require("telescope.builtin").lsp_definitions()<CR>', 'Definitions')

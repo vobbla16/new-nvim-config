@@ -36,22 +36,7 @@ return require('packer').startup(function(use)
 			'rcarriga/nvim-notify'
 		},
 		config = function ()
-			require('noice').setup {
-				lsp = {
-					override = {
-						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-						["vim.lsp.util.stylize_markdown"] = true,
-						["cmp.entry.get_documentation"] = true,
-					},
-				},
-				presets = {
-					bottom_search = true, -- use a classic bottom cmdline for search
-					command_palette = true, -- position the cmdline and popupmenu together
-					long_message_to_split = true, -- long messages will be sent to a split
-					inc_rename = false, -- enables an input dialog for inc-rename.nvim
-					lsp_doc_border = false, -- add a border to hover docs and signature help
-				}
-			}
+			require("plugins/noice")
 		end
 	}
 
@@ -62,15 +47,7 @@ return require('packer').startup(function(use)
 			ts_update()
 		end,
 		config = function ()
-			require("nvim-treesitter.configs").setup {
-				ensure_installed = "all",
-				auto_install = true,
-				highlight = {
-					enable = true,
-				},
-				additional_vim_regex_highlighting = false,
-			}
-
+			require("plugins/treesitter")
 		end
 	}
 
@@ -78,14 +55,7 @@ return require('packer').startup(function(use)
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 		config = function ()
-			require('lualine').setup {
-				options = {
-					--					theme = 'gruvbox-material',
-					theme = 'kanagawa',
-					section_separators = '',
-					component_separators = ''
-				}
-			}
+			require("plugins/lualine")
 		end
 	}
 
@@ -119,6 +89,8 @@ return require('packer').startup(function(use)
 	use {
 		"folke/which-key.nvim",
 		config = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 10
 			require("which-key").setup()
 		end
 	}
@@ -137,46 +109,7 @@ return require('packer').startup(function(use)
 		'williamboman/mason-lspconfig.nvim',
 		after = 'mason.nvim',
 		config = function ()
-			require("mason-lspconfig").setup {
-				ensure_installed = { "lua_ls" }
-			}
-			require("mason-lspconfig").setup_handlers {
-				function (server_name)
-					local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-					require("lspconfig")[server_name].setup {
-						capabilities = capabilities
-					}
-				end,
-
-				["lua_ls"] = function ()
-					local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-					require("lspconfig").lua_ls.setup {
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								runtime = {
-									-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-									version = 'LuaJIT',
-								},
-								diagnostics = {
-									-- Get the language server to recognize the `vim` global
-									globals = {'vim'},
-								},
-								workspace = {
-									-- Make the server aware of Neovim runtime files
-									library = vim.api.nvim_get_runtime_file("", true),
-								},
-								-- Do not send telemetry data containing a randomized but unique identifier
-								telemetry = {
-									enable = false,
-								}
-							},
-						},
-					}
-				end
-			}
+			require("plugins/lsp")
 		end
 	}
 
@@ -197,8 +130,8 @@ return require('packer').startup(function(use)
 
 	use {
 		"windwp/nvim-autopairs",
-		config = function() 
-			require("nvim-autopairs").setup {} 
+		config = function()
+			require("nvim-autopairs").setup {}
 		end
 	}
 
@@ -207,6 +140,13 @@ return require('packer').startup(function(use)
 		config = function()
 			require('Comment').setup()
 		end
+	}
+
+	use {
+		'nvim-telescope/telescope.nvim', tag = '0.1.1',
+		requires = {
+			'nvim-lua/plenary.nvim'
+		}
 	}
 
 	if packer_bootstrap then
