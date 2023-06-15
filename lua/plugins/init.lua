@@ -149,6 +149,22 @@ return require('packer').startup(function(use)
 		}
 	}
 
+	use {
+		'norcalli/nvim-colorizer.lua',
+		config = function ()
+			require('colorizer').setup()
+		end
+	}
+
+	use {
+		"lukas-reineke/indent-blankline.nvim",
+		config = function ()
+			require("plugins/indentBlankline")
+		end
+	}
+
+	use 'nvim-treesitter/nvim-treesitter-context'
+
 	if packer_bootstrap then
 		require('packer').sync()
 	end
