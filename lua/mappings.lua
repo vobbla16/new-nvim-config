@@ -17,9 +17,11 @@ map('n', '<C-j>', '<C-w>j')
 map('n', '<C-k>', '<C-w>k')
 map('n', '<C-l>', '<C-w>l')
 
--- don't copy on delete
+-- don't copy on delete and change
 map('n', 'd', '"_d')
 map('v', 'd', '"_d')
+map('n', 'c', '"_c')
+map('v', 'c', '"_c')
 
 -- exit from terminal
 map('t', '<S-Esc>', '<C-\\><C-n>')
@@ -37,3 +39,6 @@ map('n', '<S-Tab>', '<cmd>BufferLineCyclePrev<CR>', 'Previous buffer')
 map('n', '<C-S-e>', '<cmd>BufferLineMoveNext<CR>', 'Swap with next buffer')
 map('n', '<C-S-q>', '<cmd>BufferLineMovePrev<CR>', 'Swap with previous buffer')
 
+-- floating terminal
+map('n', '<F6>', '<cmd>FloatermToggle<CR>', 'Toggle floating terminal')
+map('t', '<F6>', '<C-\\><C-n><cmd>FloatermToggle<CR>', 'Detach from terminal and toggle it')
